@@ -1,0 +1,24 @@
+{
+    "name": "gremlinx-deploy",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "description": "Deploy 3 OP721 NFT collections to OPNet testnet, mint NFTs, and list some for sale",
+    "scripts": {
+        "deploy": "tsx deploy.ts",
+        "deploy:marketplace": "tsx deploy-marketplace.ts",
+        "deploy:all": "tsx deploy.ts && tsx deploy-marketplace.ts",
+        "mint": "tsx mint.ts",
+        "status": "tsx status.ts"
+    },
+    "dependencies": {
+        "opnet": "rc",
+        "@btc-vision/transaction": "rc",
+        "@btc-vision/bitcoin": "latest",
+        "@btc-vision/ecpair": "latest",
+        "tsx": "latest"
+    },
+    "devDependencies": {
+        "typescript": "latest"
+    }
+}

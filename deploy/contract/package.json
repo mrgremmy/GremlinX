@@ -1,0 +1,19 @@
+{
+    "name": "gremlinx-nft-contract",
+    "version": "1.0.0",
+    "private": true,
+    "description": "GremlinX OP721 NFT contract for OPNet testnet",
+    "scripts": {
+        "build": "asc src/index.ts --config asconfig.json --target debug",
+        "build:marketplace": "asc src/marketplace-index.ts --config asconfig.marketplace.json --target debug",
+        "build:all": "npm run build && npm run build:marketplace",
+        "clean": "rimraf build/*"
+    },
+    "dependencies": {
+        "@btc-vision/btc-runtime": "rc",
+        "@btc-vision/as-bignum": "latest",
+        "@btc-vision/assemblyscript": "latest",
+        "@btc-vision/opnet-transform": "latest",
+        "@assemblyscript/loader": "latest"
+    }
+}

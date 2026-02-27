@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Bitcoin Apes",
+    "symbol": "BAPE",
+    "contractAddress": "opt1sqq6nl7shqdmpwxccl4u6v588y97f3y77tyy3anqv"
+  },
+  {
+    "name": "OPNet Punks",
+    "symbol": "OPNK",
+    "contractAddress": "opt1sqzgkqwmq4l3pzr0h8wk8jcxzxs0t05a3asl0667f"
+  },
+  {
+    "name": "Chain Glyphs",
+    "symbol": "GLYPH",
+    "contractAddress": "opt1sqpta2pv9xjwlfrnr6v5chyfd9xgxllzewvyvhrc7"
+  }
+]

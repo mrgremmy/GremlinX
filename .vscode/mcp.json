@@ -1,0 +1,9 @@
+{
+  "inputs": [],
+  "servers": {
+    "opnet-bob": {
+      "type": "sse",
+      "url": "https://ai.opnet.org/mcp"
+    }
+  }
+}

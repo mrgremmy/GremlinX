@@ -1,0 +1,18 @@
+{
+  "mcp": {
+    "inputs": [],
+    "servers": {
+      "opnet-bob": {
+        "type": "sse",
+        "url": "https://ai.opnet.org/mcp"
+      }
+    }
+  },
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": true,
+    "windsurf": true,
+    "cursor-global": true,
+    "cursor-workspace": true
+  },
+  "github.copilot.chat.mcp.enabled": true
+}

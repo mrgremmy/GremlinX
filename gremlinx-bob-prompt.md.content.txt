@@ -1,0 +1,312 @@
+OPNet NFT   Marketplace — Bob    AI Master  Prompt
+Marketplace Name: GREMLINX
+Tagline: "T rade NFT s on Bitcoin. No bridges. No bullshit."
+THE PROMPT    (Copy everything below this line into Bob at ai.opnet.org)
+BUILD: Gr  emlinX —  An OP721 NFT    Marketplace on OPNet Bitcoin
+Testnet
+You are building GremlinX, an OpenSea-style NFT       marketplace that runs natively on Bitcoin Layer 1 via
+OPNet.  This is a fully operational MVP    — not a mockup, not a demo. Real wallet connections, real contract
+reads, real transaction building. It runs on OPNet Bitcoin testnet.
+MANDA  TOR Y: Read  These Docs Befor  e W riting ANY  Code
+You MUST   read ALL  of the following OPNet documentation sections FIRST       . Do not skip any . Do not start
+coding until you have read and understood every one:
+1. Fr ontend Guidelines   — Read the ENTIRE file at    guidelines/frontend-guidelines.md. Every section.  This
+covers: transaction rules, wallet integration, caching, RPC optimization, address handling, common
+mistakes, and  Vite config.
+2. Setup Guidelines   — Read   guidelines/setup-guidelines.md. Specifically: Frontend Dependencies,
+vite.config.ts (COMPLETE - USE     THIS), tsconfig.json, ESLint config for React.
+3. WalletConnect v2 docs   — Read   docs/walletconnect/README.md. Quick Start, Complete Connection
+Flow , Transaction Signing, Network Configuration sections.
+4. OP721 Examples    — Read   docs/opnet/examples/op721-examples.md. Setup, Collection Information,
+Ownership Queries,   Transfer Examples,   Approval Management sections.
+5. Instantiating Contracts   — Read   docs/opnet/contracts/instantiating-contracts.md. NFT  Contract section.
+6. Crypto Fr ontend Design skill   — Read the crypto-frontend-design skill for visual design system, theme
+architecture, component patterns, and landing page architecture.
+7. TypeScript Law   — Read and follow strictly  . No  any. No  as casts. Strict mode.
+CRITICAL   RULES (Br  eak any of these and the app is br   oken)
+Transaction Rules
+NEVER use raw PSBT    . No  new Psbt(). FORBIDDEN.
+NEVER use    @ btc-vision/transaction for contract calls. Use  getContract() from the  opnet package.
+----------------Page (0) Break----------------
+signer: null and  mldsaSigner: null in  sendTransaction(). AL WAYS.  The wallet handles signing.
+NEVER put private keys in frontend code.
+Always simulate before sending. NEVER skip simulation.
+Pr ovider  & Caching Rules
+NEVER create multiple JSONRpcProvider instances. Use a singleton service.
+NEVER call   getContract() on every render  . Cache contract instances in a service.
+NEVER use    Map<A ddress, T>  for caches. Use string keys (   .toHex() / .toString()).
+Use  .metadata() instead of calling name(), symbol(), etc separately    . One RPC call, not four  .
+Clear caches on network change.
+Addr ess Rules
+Both  op1... and  0x... formats are valid for contract addresses.
+Use  AddressVerificator from  @ btc-vision/transaction for ALL  address validation.
+For transfers requiring public keys: MUST     use hex format (0x...). Look up via    provider.getPublicKeyInfo()
+if needed.
+Wallet Rules
+Only OP_W  ALLET   wallet support. Use   @ btc-vision/walletconnect.
+W rap app in  <W alletConnectProvider theme=" dark"> .
+Use  useWalletConnect() hook for all wallet state.
+Connect via   connectToWallet(SupportedWallets.OP_WALLET).
+Handle network changes    WITHOUT    page refresh.  Auto-detect via the hook, clear caches, refetch data.
+Vite Rules
+Use the COMPLETE vite.config.ts from setup-guidelines.md. Do not simplify it.
+nodePolyfills plugin MUST   come before  react() plugin.
+MUST   include  crypto: 'crypto-browserify' override.
+MUST   include  undici alias to  opnet/src/fetch/fetch-browser.js.
+MUST   include  dedupe for noble/scure libs.
+Use  "latest" for all Vite tooling versions. Never pin   Vite versions.
+Package Rules
+After  npm install, AL WAYS run:  npx npm-check-updates -u && npm install
+Use these exact dependency tags:
+----------------Page (1) Break----------------
+"opnet": "rc"
+"@ btc-vision/transaction": "rc"
+"@ btc-vision/bitcoin": "rc"
+"@ btc-vision/walletconnect": "latest"
+All Vite plugins:  "latest"
+Include  "overrides": { "@ noble/hashes": "2.0.1" } in package.json.
+Tech Stack
+Framework:   React 19+ with   Vite (NOT  Next.js — use  Vite with React Router for SP  A)
+Language:  TypeScript strict mode, ESNext tar   get
+Styling:  CSS custom properties +   Tailwind CSS for utilities
+Wallet: @btc-vision/walletconnect (OP_W     ALLET   only)
+OPNet SDK:   opnet (rc), @btc-vision/transaction (rc), @btc-vision/bitcoin (rc)
+Network:  OPNet Bitcoin  Testnet ( https://testnet.opnet.or g)
+Router:  React Router v7
+Design System
+Brand Identity
+Name:  GremlinX
+Primary accent:    #FF6B00 (OPNet orange)
+Secondary accent:    #00FF88 (success green)
+Backgr ound base:   #0a0a0f
+Surface raised:   #12121a
+Surface overlay:    #1a1a25
+Text primary:   #e8e8ed
+Text secondary:    #8888a0
+Error:  #ff3355
+Font:  Poppins (Google Fonts) for body + display
+Vibe: Dark, premium, fun but professional.     Think OpenSea meets Blur meets crypto-punk ener      gy . NOT  a
+boring DeFi dashboard.   This is a collectibles trading platform.
+Design Principles
+Depth over flatness. Layered shadows, subtle gradients, glassmorphism.
+Layered backgrounds with radial gradient orbs and subtle grid texture. Never plain solid backgrounds.
+Alternating section backgrounds for visual rhythm.
+----------------Page (2) Break----------------
+All interactive elements have hover   , focus, active, disabled states.
+All cards have subtle lift animation on hover (translateY     -2px + shadow increase).
+Loading skeletons everywhere. No blank screens while data loads.
+Mobile responsive. CSS Grid for layouts. Flexbox for component alignment.
+No emojis anywhere in the UI.
+Scroll-triggered entry animations on sections (opacity + translateY).
+Respect  prefers-reduced-motion.
+Pages  To Build
+1. EXPLORE P   AGE (/ — Home)
+The main marketplace grid.    This is the first thing users see.
+Layout:
+Top: Hero banner with "GremlinX" branding, tagline, and stats bar (total listed, total volume, floor price)
+Below: Filter bar (collection selector dropdown, sort dropdown, listed-only toggle, search by token ID)
+Main: Responsive grid of NFT     cards (4 columns desktop, 2 tablet, 1 mobile)
+NFT  Card Component:
+NFT  image (loaded from IPFS via tokenURI metadata)
+Token ID (#001, #002, etc.)
+Collection name
+Price in BTC if listed (with sat denomination option)
+Owner address (truncated)
+"Buy" button if listed and not owned by connected wallet
+Subtle rarity indicator or trait badge
+Card hover: lift animation + subtle glow border in accent color
+Data Flow:
+Read NFT   collection data via OP721 contract: totalSupply    , then iterate tokenOfOwnerByIndex or batch
+query owners
+Read metadata from IPFS baseURI + tokenId for each NFT         (image, attributes, name)
+Cache aggressively — NFT     metadata doesn't change
+Listings come from the marketplace contract (or initially from a local state / mock until marketplace
+contract is deployed)
+For MVP  without marketplace contract deployed yet:
+----------------Page (3) Break----------------
+Show all NFT  s from any OP721 collection on testnet
+Allow users to connect wallet and see which NFT     s they own
+"List for Sale" and "Buy" buttons visible but show "Coming soon — marketplace contract deploying"
+toast if contract not yet live
+The UI must be fully wired and ready — only the contract call is the missing piece
+2. NFT  DET AIL  PAGE (/nft/:collection/:tokenId)
+Layout:
+Left: Lar ge NFT  image (fills left column on desktop, full width on mobile)
+Right: Details panel
+Collection name + verified badge
+Token ID
+Current owner (address, truncated, with copy button)
+Price + "Buy Now" button (if listed)
+"List for Sale" button (if owned by connected wallet, opens price input modal)
+"Cancel Listing" button (if listed by connected wallet)
+"Update Price" button (if listed by connected wallet)
+Below image:   Traits/Attributes grid
+Each trait shown as a pill/badge: "Background: Schizo Pink" with percentage rarity
+Use a responsive grid of trait cards
+Below traits:  Activity/History section
+Table of past sales, transfers, listings (reads from chain events when available)
+For MVP: show "No activity yet" placeholder
+Modals:
+"List for Sale" modal: price input (BTC), gas estimate, confirm button
+"Update Price" modal: new price input, confirm
+"Buy" confirmation modal: shows price, gas estimate, total cost, confirm button
+3. COLLECTION P   AGE (/collection/:addr  ess)
+Layout:
+Collection banner image + avatar icon
+Collection name, symbol, description
+Stats row: floor price, total volume, items, owners, listed count
+Same filterable grid as Explore page but scoped to this collection
+----------------Page (4) Break----------------
+4. PROFILE / MY    NFTS P AGE (/pr ofile)
+Layout:
+Wallet address display (with copy button)
+Balance display (BTC balance from wallet)
+Tabs: "My NFT  s" | "Listed" | "Activity"
+My NFT  s tab: grid of NFT  s owned by connected wallet
+Listed tab: grid of NFT  s currently listed by this wallet with "Cancel" option
+Activity tab: transaction history (placeholder for MVP)
+When wallet not connected:
+Show a centered "Connect    Wallet" prompt with the OP_W   ALLET   connect button
+5. GLOBAL   COMPONENTS
+Navigation Bar   (sticky top):
+GremlinX logo/wordmark (left)
+Nav links: Explore, Collections, (link to staking page placeholder)
+Search bar (search by token ID or collection address)
+Wallet connect button (right)
+Not connected: "Connect    Wallet" orange button
+Connected: truncated address + balance + network badge + disconnect option
+Network badge shows "T    estnet" with colored indicator
+Footer:
+GremlinX branding
+Links: Docs, GitHub,   Twitter/X placeholder
+"Built on OPNet — Bitcoin L1" text
+"Powered by OP721" badge
+Toast/Notification System:
+Success: transaction confirmed (green)
+Pending: transaction submitted, waiting (yellow/orange pulse)
+Error: transaction failed with error message (red)
+Info: general notifications (blue)
+Toasts stack in bottom-right, auto-dismiss after 5 seconds
+----------------Page (5) Break----------------
+Contract Integration Patterns
+Reading OP721 NFT    Data:
+Wallet Connection:
+typescript
+import  { getContract , IOP721Contract   , OP_721_ABI   , JSONRpcProvider    } from  'opnet';
+import  { networks , Network  } from  '@btc-vision/bitcoin' ;
+// Singleton provider
+const network : Network  = networks .opnetT estnet ; // Bitcoin testnet
+const provider  = new  JSONRpcProvider   ({ url: 'https://testnet.opnet.or g', network  });
+// Cached contract instance
+const nft = getContract <IOP721Contract   >(nftAddress , OP_721_ABI   , provider , network , walletAddress  );
+// Read collection info (single call)
+const metadata  = await nft.metadata ();
+const { name , symbol , totalSupply  } = metadata .properties ;
+// Read individual NFT
+const owner  = await nft.ownerOf (tokenId );
+const uri = await nft.tokenURI  (tokenId );
+// Check user's NFT  s
+const balance = await nft.balanceOf (userAddress );
+for (let i = 0n ; i < balance .properties .balance ; i++ ) {
+  const tokenId = await nft.tokenOfOwnerByIndex    (userAddress , i);
+}
+tsx
+----------------Page (6) Break----------------
+Addr ess Validation:
+Pr oject Structur e
+import  { WalletConnectProvider  , useW alletConnect , SupportedW  allets } from  '@btc-vision/walletconnect'  ;
+// In main.tsx — wrap app:
+<WalletConnectProvider   theme ="dark ">
+  <App  />
+</WalletConnectProvider  >
+// In components:
+const { 
+  openConnectModal   , connectT oW allet, disconnect ,
+  walletAddress , publicKey , network , walletBalance  , 
+  provider , connecting , signer 
+} = useW alletConnect ();
+// Connect to OP_W   ALLET   only:
+const connect  = () =>  connectT oW allet(SupportedW  allets.OP_W  ALLET  );
+typescript
+import  { AddressV  erificator  } from  '@btc-vision/transaction'  ;
+import  { networks  } from  '@btc-vision/bitcoin' ;
+const isValid = AddressV  erificator .isValidAddress (address , networks .opnetT estnet );
+const isContract  = AddressV  erificator .isValidP2OP Address (address , networks .opnetT estnet );
+gremlinx/
+├── index.html
+├── package.json
+├── vite.config.ts              # COMPLETE config from setup-guidelines
+├── tsconfig.json
+├── .eslintrc.json
+├── src/
+│   ├── main.tsx                # Entry point, WalletConnectProvider wrapper
+│   ├── App.tsx                 # Router setup
+│   ├── pages/
+│   │   ├── ExplorePage.tsx
+│   │   ├── NFTDetailPage.tsx
+│   │   ├── CollectionPage.tsx
+│   │   └── ProfilePage.tsx
+│   ├── components/
+│   │   ├── layout/
+----------------Page (7) Break----------------
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   └── Layout.tsx
+│   │   ├── nft/
+│   │   │   ├── NFTCard.tsx
+│   │   │   ├── NFTGrid.tsx
+│   │   │   ├── NFTTraits.tsx
+│   │   │   └── NFTImage.tsx
+│   │   ├── marketplace/
+│   │   │   ├── ListingModal.tsx
+│   │   │   ├── BuyModal.tsx
+│   │   │   └── PriceDisplay.tsx
+│   │   ├── wallet/
+│   │   │   ├── WalletButton.tsx
+│   │   │   └── NetworkBadge.tsx
+│   │   └── ui/
+│   │       ├── Toast.tsx
+│   │       ├── Skeleton.tsx
+│   │       ├── Modal.tsx
+│   │       ├── Button.tsx
+│   │       └── SearchBar.tsx
+│   ├── services/
+│   │   ├── ProviderService.ts   # Singleton JSONRpcProvider
+│   │   ├── ContractService.ts   # Cached contract instances
+│   │   ├── NFTService.ts        # NFT  data fetching + caching
+│   │   └── MarketplaceService.ts # Listing/buying logic
+│   ├── hooks/
+│   │   ├── useNFTCollection.ts
+│   │   ├── useNFTDetail.ts
+│   │   ├── useUserNFT s.ts
+│   │   └── useMarketplace.ts
+│   ├── config/
+│   │   ├── contracts.ts         # Contract addresses per network
+│   │   └── networks.ts          # Network configuration
+│   ├── utils/
+│   │   ├── formatting.ts        # Address truncation, BTC formatting
+│   │   ├── ipfs.ts              # IPFS URL resolution
+│   │   └── validation.ts        # Address validation wrappers
+│   ├── types/
+│   │   ├── nft.ts               # NFT interfaces
+│   │   ├── marketplace.ts       # Listing interfaces
+│   │   └── common.ts            # Shared types
+│   └── styles/
+│       ├── globals.css          # CSS custom properties, reset, theme
+│       ├── components.css       # Component-level styles
+│       └── animations.css       # Keyframes, transitions
+----------------Page (8) Break----------------
+What "Done" Looks Like
+The MVP   is done when:
+1. User can connect OP_W   ALLET   on Bitcoin testnet
+2. User can browse a grid of OP721 NFT     s from any collection address entered
+3. User can click an NFT   to see full detail page with traits and owner info
+4. User can see their own NFT   s in the profile page
+5. UI is polished, dark theme, responsive, with loading states
+6. All contract reads work against live OPNet testnet RPC
+7. List/Buy/Cancel modals are built and ready — wired to contract calls when marketplace contract is
+deployed
+8. No TypeScript errors, no console errors, no    any types
+Build this now  . Start with the project scaf fold (package.json, vite.config.ts, tsconfig.json), then services layer    ,
+then pages, then polish.
+----------------Page (9) Break----------------
