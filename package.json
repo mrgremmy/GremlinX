@@ -1,0 +1,50 @@
+{
+    "name": "gremlinx",
+    "private": true,
+    "version": "0.1.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc --noEmit && vite build",
+        "lint": "eslint src --ext .ts,.tsx",
+        "lint:fix": "eslint src --ext .ts,.tsx --fix",
+        "typecheck": "tsc --noEmit",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "react": "latest",
+        "react-dom": "latest",
+        "react-router-dom": "latest",
+        "opnet": "rc",
+        "@btc-vision/transaction": "rc",
+        "@btc-vision/bitcoin": "rc",
+        "@btc-vision/walletconnect": "latest",
+        "@btc-vision/ecpair": "latest",
+        "@btc-vision/bip32": "latest"
+    },
+    "devDependencies": {
+        "vite": "latest",
+        "@vitejs/plugin-react": "latest",
+        "vite-plugin-node-polyfills": "latest",
+        "vite-plugin-eslint2": "latest",
+        "typescript": "latest",
+        "@types/react": "latest",
+        "@types/react-dom": "latest",
+        "@types/node": "latest",
+        "eslint": "latest",
+        "@typescript-eslint/eslint-plugin": "latest",
+        "@typescript-eslint/parser": "latest",
+        "eslint-plugin-react": "latest",
+        "eslint-plugin-react-hooks": "latest",
+        "eslint-plugin-import": "latest",
+        "eslint-import-resolver-typescript": "latest",
+        "eslint-config-prettier": "latest",
+        "crypto-browserify": "latest",
+        "stream-browserify": "latest",
+        "tailwindcss": "latest",
+        "@tailwindcss/vite": "latest"
+    },
+    "overrides": {
+        "@noble/hashes": "latest"
+    }
+}
